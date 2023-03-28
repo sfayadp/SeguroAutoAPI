@@ -54,7 +54,9 @@ namespace SeguroAutoAPI.Application
         {
             try
             {
-                if (polizaDTO.FechaInicioPolizaDTO > polizaDTO.FechaFinPolizaDTO)
+                if (polizaDTO.FechaInicioPolizaDTO >= polizaDTO.FechaFinPolizaDTO ||
+                    polizaDTO.FechaInicioPolizaDTO < DateTime.Now ||
+                    polizaDTO.FechaFinPolizaDTO < DateTime.Now)
                 {
                     return new BadRequestObjectResult("La fecha de inicio no puede ser mayor que la fecha de fin");
                 }
