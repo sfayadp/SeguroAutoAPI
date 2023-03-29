@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SeguroAutoAPI.DataAccess.Context;
 using SeguroAutoAPI.DataAccess.Models;
 using SeguroAutoAPI.DataAccess.Repository.Contracts;
