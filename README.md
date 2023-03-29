@@ -29,7 +29,7 @@ API RESTful para la gestión de pólizas de seguro de autos.
 ## Configuración del proyecto
 
 1. Clonar el repositorio
-2. Abrir la solución `SeguroAutoAPI.sln` en Visual Studio
+2. Abrir la solución `SeguroAutoAPI.sln` en Visual Studio o en una terminal de comandos ubicarse en la ruta donde clono el repo.
 3. Abrir la ventana de `Package Manager Console` y seleccionar el proyecto `SeguroAutoAPI`
 4. Crea una base de datos en SQL Server.
 5. Actualiza la cadena de conexión en el archivo appsettings.json para que apunte a la base de datos creada en el paso anterior.
