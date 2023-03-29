@@ -1,6 +1,8 @@
 ﻿using SeguroAutoAPI.Application;
-using AutoMapper;
 using SeguroAutoAPI.Application.Contracts;
+using SeguroAutoAPI.DataAccess.Models;
+using SeguroAutoAPI.DataAccess.Repository;
+using SeguroAutoAPI.DataAccess.Repository.Contracts;
 using SeguroAutoAPI.Domain.Contracts;
 
 namespace SeguroAutoAPI.DI
@@ -20,6 +22,10 @@ namespace SeguroAutoAPI.DI
 
             #region AutoMapper
             services.AddAutoMapper(typeof(MappingProfile));
+            #endregion
+
+            #region Repository
+            services.AddScoped<IRepository<Poliza>, Repository<Poliza>>();
             #endregion
         }
     }

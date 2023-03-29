@@ -18,6 +18,38 @@ namespace SeguroAutoAPI.Controllers
             _polizaAppService = polizaAppService;
         }
 
+        [HttpGet]
+        [Authorize]
+        [Route(nameof(PolizasController.GetAllPolizas))]
+        public async Task<ActionResult<IEnumerable<PolizaDTO>>> GetAllPolizas()
+        {
+            return await _polizaAppService.GetAllPolizas();
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route(nameof(PolizasController.GetPolizaById))]
+        public async Task<ActionResult<PolizaDTO>> GetPolizaById(string id)
+        {
+            return await _polizaAppService.GetPolizaById(id);
+        }
+
+        [HttpPut]
+        [Authorize]
+        [Route(nameof(PolizasController.UpdatePoliza))]
+        public async Task<ActionResult<PolizaDTO>> UpdatePoliza(PolizaDTO polizaDTO)
+        {
+            return await _polizaAppService.UpdatePoliza(polizaDTO);
+        }
+
+        [HttpDelete]
+        [Authorize]
+        [Route(nameof(PolizasController.DeletePoliza))]
+        public async Task<ActionResult<PolizaDTO>> DeletePoliza(string id)
+        {
+            return await _polizaAppService.DeletePoliza(id);
+        }
+
         // GET: api/Polizas?placa=xyz&numeroPoliza=123
         [HttpGet]
         [Authorize]

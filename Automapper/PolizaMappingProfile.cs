@@ -20,7 +20,9 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.DireccionResidenciaDTO, opt => opt.MapFrom(src => src.DireccionResidencia))
             .ForMember(dest => dest.PlacaAutomotorDTO, opt => opt.MapFrom(src => src.PlacaAutomotor))
             .ForMember(dest => dest.ModeloAutomotorDTO, opt => opt.MapFrom(src => src.ModeloAutomotor))
-            .ForMember(dest => dest.VehiculoTieneInspeccionDTO, opt => opt.MapFrom(src => src.VehiculoTieneInspeccion));
+            .ForMember(dest => dest.VehiculoTieneInspeccionDTO, opt => opt.MapFrom(src => src.VehiculoTieneInspeccion))
+            .ForMember(dest => dest.CoberturasDTO, opt => opt.MapFrom(src => src.Coberturas));
+
 
         CreateMap<PolizaDTO, Poliza>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.IdDTO))

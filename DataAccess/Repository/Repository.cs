@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SeguroAutoAPI.DataAccess.Context;
+using SeguroAutoAPI.DataAccess.Models;
 using SeguroAutoAPI.DataAccess.Repository.Contracts;
 
 namespace SeguroAutoAPI.DataAccess.Repository
@@ -17,12 +20,30 @@ namespace SeguroAutoAPI.DataAccess.Repository
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            if (typeof(T) == typeof(Poliza))
+            {
+                var polizaSet = _dbSet as DbSet<Poliza>;
+                var polizas = await polizaSet.Include(p => p.Coberturas).ToListAsync();
+                return polizas as IEnumerable<T>;
+            }
+            else
+            {
+                return await _dbSet.ToListAsync();
+            }
         }
 
         public async Task<T> GetByIdAsync(Guid id)
         {
-            return await _dbSet.FindAsync(id);
+            if (typeof(T) == typeof(Poliza))
+            {
+                var polizaSet = _dbSet as DbSet<Poliza>;
+                var poliza = await polizaSet.Include(p => p.Coberturas).FirstOrDefaultAsync(p => p.Id == id);
+                return poliza as T;
+            }
+            else
+            {
+                return await _dbSet.FindAsync(id);
+            }
         }
 
         public async Task<T> AddAsync(T entity)
@@ -32,19 +53,33 @@ namespace SeguroAutoAPI.DataAccess.Repository
             return entity;
         }
 
-        public async Task UpdateAsync(T entity)
+        public async Task<bool> UpdateAsync(T entity)
         {
-            _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _dbSet.Update(entity);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             var entity = await _dbSet.FindAsync(id);
             if (entity != null)
             {
                 _dbSet.Remove(entity);
                 await _context.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

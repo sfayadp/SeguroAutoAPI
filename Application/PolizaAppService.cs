@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SeguroAutoAPI.Application.Contracts;
-using SeguroAutoAPI.DataAccess.Context;
 using SeguroAutoAPI.DataAccess.Models;
 using SeguroAutoAPI.Domain.Contracts;
 using SeguroAutoAPI.DTO;
@@ -78,6 +76,108 @@ namespace SeguroAutoAPI.Application
                 return new BadRequestObjectResult(ex.Message);
             }
 
+        }
+        
+
+        public async Task<ActionResult<PolizaDTO>> GetPolizaById(string idPoliza)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(idPoliza))
+                {
+                    return new BadRequestObjectResult("Debe proporcionar un id de póliza");
+                }
+
+                Poliza poliza = await _polizaDomainService.GetPolizaById(idPoliza);
+
+                if (poliza == null)
+                {
+                    return new NotFoundObjectResult("Póliza no encontrada");
+                }
+
+                PolizaDTO polizaDTO = _mapper.Map<PolizaDTO>(poliza);
+                
+                return polizaDTO;
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
+
+        public async Task<ActionResult<IEnumerable<PolizaDTO>>> GetAllPolizas()
+        {
+            try
+            {
+                IEnumerable<Poliza> listPolizas = await _polizaDomainService.GetAllPolizas();
+
+                if (listPolizas.Count() == 0)
+                {
+                    return new NotFoundObjectResult("Póliza no encontrada");
+                }
+
+                IEnumerable<PolizaDTO> listPolizasDTO = _mapper.Map<List<PolizaDTO>>(listPolizas);
+
+                return new OkObjectResult(listPolizasDTO);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
+
+        public async Task<ActionResult<PolizaDTO>> DeletePoliza(string idPoliza)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(idPoliza))
+                {
+                    return new BadRequestObjectResult("Debe proporcionar un id de póliza");
+                }
+
+                bool res = await _polizaDomainService.DeletePoliza(idPoliza);
+
+                if (res)
+                    return new OkObjectResult("Se elimino la poliza");
+                else
+                    return new BadRequestObjectResult("No se pudo eliminar la poliza");
+
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
+
+        public async Task<ActionResult<PolizaDTO>> UpdatePoliza(PolizaDTO polizaDTO)
+        {
+            try
+            {
+                if (polizaDTO == null)
+                {
+                    return new BadRequestObjectResult("Debe proporcionar una póliza valida");
+                }
+
+                Poliza polizaAEditar = _mapper.Map<Poliza>(polizaDTO);
+
+                if (polizaDTO.CoberturasDTO.Count > 0)
+                {
+                    List<Cobertura> coberturasPoliza = _mapper.Map<List<Cobertura>>(polizaDTO.CoberturasDTO);
+                    polizaAEditar.Coberturas = coberturasPoliza;
+                }
+
+                bool res = await _polizaDomainService.UpdatePoliza(polizaAEditar);
+
+                if (res)
+                    return new OkObjectResult("Se edito la poliza correctamente");
+                else
+                    return new BadRequestObjectResult("No se pudo editar la poliza");
+
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
         }
 
     }

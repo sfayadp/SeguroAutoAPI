@@ -1,5 +1,4 @@
 ﻿using SeguroAutoAPI.DataAccess.Models;
-using SeguroAutoAPI.DTO;
 
 namespace SeguroAutoAPI.Domain.Contracts
 {
@@ -7,5 +6,9 @@ namespace SeguroAutoAPI.Domain.Contracts
     {
         Poliza GetPoliza(string? placa, string? numeroPoliza);
         string PostPoliza(Poliza poliza);
+        Task<Poliza> GetPolizaById(string polizaId);
+        Task<IEnumerable<Poliza>> GetAllPolizas();
+        Task<bool> UpdatePoliza(Poliza poliza);
+        Task<bool> DeletePoliza(string idPoliza);
     }
 }
